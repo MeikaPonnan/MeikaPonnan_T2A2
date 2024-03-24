@@ -13,10 +13,15 @@ class User(db.Model):
 
     books = db.relationship('Book', back_populates='user', cascade='all, delete')
 
+    reviews = db.relationship('Review', back_populates='user', cascade='all, delete')
+
 
 class UserSchema(ma.Schema):
 
     books = fields.List(fields.Nested('BookSchema', exclude=['user']))
+
+    reviews = fields.List(fields.Nested('ReviewSchema', exclude=['user']))
+                          
     class Meta:
         fields = ('id', 'username', 'email', 'password', 'is_admin', 'books')
 
