@@ -1,5 +1,6 @@
 from init import db, ma 
 from marshmallow import fields
+from marshmallow.validate import Length
 
 
 class Book(db.Model):
@@ -21,6 +22,8 @@ class Book(db.Model):
 
 
 class BookSchema(ma.Schema):
+    
+    title = fields.String(required=True, validate=Length(min=2, error="Title must be at least 2 characters long."))
 
     user = fields.Nested('UserSchema', only = ['username'])
     comments = fields.List(fields.Nested('ReviewSchema'))
