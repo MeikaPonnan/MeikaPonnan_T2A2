@@ -13,7 +13,7 @@ class User(db.Model):
 
     books = db.relationship('Book', back_populates='user', cascade='all, delete')
 
-    review = db.relationship('Review', back_populates='user', cascade='all, delete')
+    reviews = db.relationship('Review', back_populates='user', cascade='all, delete')
 
 
 class UserSchema(ma.Schema):

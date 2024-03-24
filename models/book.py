@@ -16,7 +16,7 @@ class Book(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', back_populates='books')
-    reviews = db.relationship('Review', back_populates='book')
+    reviews = db.relationship('Review', back_populates='book', cascade='all, delete')
 
 
 

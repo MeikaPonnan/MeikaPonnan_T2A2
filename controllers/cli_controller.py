@@ -107,10 +107,11 @@ def seed_tables():
             comment="message2",
             user=users[1],
             book=books[3]
-        ),
+        )
 
     ]
 
+    db.session.add_all(reviews)
 
     db.session.commit()
 
