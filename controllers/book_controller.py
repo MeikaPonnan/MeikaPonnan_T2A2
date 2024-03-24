@@ -25,20 +25,23 @@ def get_one_book(book_id):
 @books_bp.route('/', methods=["POST"])
 @jwt_required()
 def create_book():
-    body_data = request.get_json()
-    book = Book(
-        title=body_data.get('title'),
-        author=body_data.get('author'),
-        pagecount=body_data.get('pagecount'),
-        status=body_data.get('status'),
-        review=body_data.get('review'),
-        genre=body_data.get('genre'),
-        user_id= get_jwt_identity()
+    try:
+        body_data = book_schema.load(request.get_json())
+        book = Book(
+            title=body_data.get('title'),
+            author=body_data.get('author'),
+            pagecount=body_data.get('pagecount'),
+            status=body_data.get('status'),
+            review=body_data.get('review'),
+            genre=body_data.get('genre'),
+            user_id= get_jwt_identity()
 
-    )
-    db.session.add(book)
-    db.session.commit()
-    return book_schema.dump(book), 201
+        )
+        db.session.add(book)
+        db.session.commit()
+        return book_schema.dump(book), 201
+    except:
+        return {'error'}
 
 @books_bp.route('/<int:book_id>', methods=["DELETE"])
 def delete_book(book_id):
@@ -53,7 +56,7 @@ def delete_book(book_id):
     
 @books_bp.route('/<int:book_id>', methods=["PUT", "PATCH"])
 def update_book(book_id):
-    body_data = request.get_json()
+    body_data = book_schema.load(request.get_json(), partial=True)
     stmt = db.select(Book).filter_by(id=book_id)
     book = db.session.scalar(stmt)
     if book:
