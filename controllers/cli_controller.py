@@ -2,6 +2,7 @@ from flask import Blueprint
 from init import db, bcrypt 
 from models.user import User
 from models.book import Book
+from models.review import Review
 
 
 db_commands = Blueprint('db', __name__)
@@ -78,6 +79,38 @@ def seed_tables():
     ]
 
     db.session.add_all(books)
+
+    reviews = [
+        Review(
+            rating="5",
+            comment="message",
+            user=users[0],
+            book=books[0]
+
+        ),
+        Review(
+            rating="4",
+            comment="message long",
+            user=users[0],
+            book=books[3]
+        ),
+        Review(
+            rating="4.5",
+            comment="message1",
+            user=users[1],
+            book=books[2]
+            
+        ),
+
+        Review(
+            rating="3",
+            comment="message2",
+            user=users[1],
+            book=books[3]
+        ),
+
+    ]
+
 
     db.session.commit()
 
