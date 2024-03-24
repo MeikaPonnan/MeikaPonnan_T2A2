@@ -16,14 +16,18 @@ class Book(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', back_populates='books')
+    reviews = db.relationship('Review', back_populates='book')
+
 
 
 class BookSchema(ma.Schema):
 
     user = fields.Nested('UserSchema', only = ['username'])
+    comments = fields.List(fields.Nested('ReviewSchema'))
+    
 
     class Meta:
-        fields = ('id', 'title', 'author', 'pagecount', 'status', 'review', 'genre')
+        fields = ('id', 'title', 'author', 'pagecount', 'status', 'review', 'genre', 'user')
         ordered=True
             
 book_schema = BookSchema()
