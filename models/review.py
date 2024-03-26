@@ -9,7 +9,7 @@ class Review(db.Model):
     comment = db.Column(db.Text)
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey("books.id", nullable=False))
+    book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False)
 
     user = db.relationship('User', back_populates='reviews')
     book = db.relationship('Book', back_populates='reviews')

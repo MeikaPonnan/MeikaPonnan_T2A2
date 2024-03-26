@@ -13,14 +13,15 @@ auth_bp= Blueprint('auth', __name__, url_prefix='/auth')
 def auth_register():
     try:
         body_data = request.get_json()
-        password = body_data.get('password')
-        hashed_password = ""
-        if password:
-            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+      
         user = User(
             username=body_data.get('username'),
             email=body_data.get('email')
         )
+    
+        if password:
+            user.password = bcrypt.generate_password_hash(password).decode('utf-8')
+       
 
         password = body_data.get('password')
         if password:
@@ -34,9 +35,9 @@ def auth_register():
     except IntegrityError as err:
         print(err.orig.diag.column_name)
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}
+            return {"error": f"The {err.orig.diag.column_name} is required."}
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
-            return {"error": "Email address already in use"}, 409
+            return {"error": "Email address already in use."}, 409
     
 @auth_bp.route("/login", methods=["POST"])
 def auth_login():

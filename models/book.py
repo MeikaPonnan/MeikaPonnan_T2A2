@@ -1,8 +1,9 @@
 from init import db, ma 
 from marshmallow import fields
-from marshmallow.validate import Length
+from marshmallow.validate import Length, OneOf
+from marshmallow.exceptions import ValidationError
 
-
+VALID_STATUSES =('Read', 'Not Read', 'Currently reading')
 class Book(db.Model):
     __tablename__= "books"
 
@@ -23,7 +24,12 @@ class Book(db.Model):
 
 class BookSchema(ma.Schema):
     
-    title = fields.String(required=True, validate=Length(min=2, error="Title must be at least 2 characters long."))
+    title = fields.String(required=True, validate=Length(min=2, error="Title must be at least 2 characters long.")
+
+
+    )
+    status = fields.String(Validate=OneOf(VALID_STATUSES))
+    
 
     user = fields.Nested('UserSchema', only = ['username'])
     comments = fields.List(fields.Nested('ReviewSchema'))
